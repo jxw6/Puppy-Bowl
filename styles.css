@@ -30,5 +30,9 @@ body {
 
 button {
   width: fit-content;
-  padding: 0px 2px;
+  padding: 4px 2px;
+}
+
+#new-player-form {
+  display: flex;
 }

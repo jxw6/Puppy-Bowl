@@ -40,8 +40,14 @@ const fetchSinglePlayer = async (playerId) => {
     }
 };
 
-const addNewPlayer = async (playerObj) => {
+const addNewPlayer = async () => {
     try {
+        let playerObj = {};
+        playerObj['name'] = document.getElementById('formName').value;
+        playerObj['breed'] = document.getElementById('formBreed').value;
+        playerObj['status'] = document.getElementById('formStatus').value;
+        playerObj['imageUrl'] = document.getElementById('formImageUrl').value;
+        playerObj['teamId'] = document.getElementById('formTeam').value;
         const response = await fetch(APIURL + 'players', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -146,7 +152,15 @@ const renderNewPlayerForm = () => {
         formBreedLabel.innerText = "Breed:";
         
         var formStatusLabel = document.createElement("label")
-        var formStatusInput = document.createElement("input")
+        var formStatusInput = document.createElement("select")
+        var option = document.createElement("option");
+        option.value = "field";
+        option.text = "field";
+        formStatusInput.appendChild(option)
+        var option2 = document.createElement("option");
+        option2.value = "bench";
+        option2.text = "bench";
+        formStatusInput.appendChild(option2)
 
         formStatusInput.setAttribute("id","formStatus");
         //formStatusLabel.appendChild(formStatusInput);
