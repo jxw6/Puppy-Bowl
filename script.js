@@ -4,7 +4,7 @@ const newPlayerFormContainer = document.getElementById('new-player-form');
 // Add your cohort name to the cohortName variable below, replacing the 'COHORT-NAME' placeholder
 const cohortName = '2308-ACC-PT-WEB-PT-B';
 // Use the APIURL variable for fetch requests
-const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/2308-acc-pt-web-pt-b/players`;
+const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}/`;
 
 const state = {
     players: [],
@@ -132,49 +132,56 @@ const renderNewPlayerForm = () => {
         var formNameLabel = document.createElement("label")
         var formNameInput = document.createElement("input")
 
-        formNameInput.setAttribute("id","formName");
-        formNameLabel.appendChild(formNameInput);
+        formNameInput.id = "formName"
+        formNameInput.type = "text"
+        formNameInput.name = "name"
+
         formNameLabel.innerText = "Name:";
-        form.appendChild(formNameLabel);
 
         var formBreedLabel = document.createElement("label")
         var formBreedInput = document.createElement("input")
 
         formBreedInput.setAttribute("id","formBreed");
-        formBreedLabel.appendChild(formBreedInput);
+        //formBreedLabel.appendChild(formBreedInput);
         formBreedLabel.innerText = "Breed:";
-        form.appendChild(formBreedLabel);
-
+        
         var formStatusLabel = document.createElement("label")
         var formStatusInput = document.createElement("input")
 
         formStatusInput.setAttribute("id","formStatus");
-        formStatusLabel.appendChild(formStatusInput);
+        //formStatusLabel.appendChild(formStatusInput);
         formStatusLabel.innerText = "Status:";
-        form.appendChild(formStatusLabel);
 
         var formImageUrlLabel = document.createElement("label")
         var formImageUrlInput = document.createElement("input")
 
         formImageUrlInput.setAttribute("id","formImageUrl");
-        formImageUrlLabel.appendChild(formImageUrlInput);
+        //formImageUrlLabel.appendChild(formImageUrlInput);
         formImageUrlLabel.innerText = "ImageUrl:";
-        form.appendChild(formImageUrlLabel);
 
         var formTeamLabel = document.createElement("label")
         var formTeamInput = document.createElement("input")
 
         formTeamInput.setAttribute("id","formTeam");
-        formTeamLabel.appendChild(formTeamInput);
+        //formTeamLabel.appendChild(formTeamInput);
         formTeamLabel.innerText = "TeamID:";
-        form.appendChild(formTeamLabel);
 
         var button = document.createElement("button");
         button.setAttribute("type", "button");
         button.addEventListener("click", addNewPlayer);
         button.innerText = "Add Player";
+        
+        form.appendChild(formNameLabel);
+        form.appendChild(formNameInput);
+        form.appendChild(formBreedLabel);
+        form.appendChild(formBreedInput);
+        form.appendChild(formStatusLabel);
+        form.appendChild(formStatusInput);
+        form.appendChild(formImageUrlLabel);
+        form.appendChild(formImageUrlInput);
+        form.appendChild(formTeamLabel);
+        form.appendChild(formTeamInput);
         form.appendChild(button);
-
         newPlayerForm.appendChild(form);
 
     } catch (err) {
