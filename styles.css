@@ -7,13 +7,11 @@
 body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 #all-players-container {
   width: 80%;
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
 }
 

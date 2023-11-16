@@ -115,8 +115,8 @@ const renderAllPlayers = (playerList) => {
             <br>UpdatedAt: ${player.updatedAt}
             <br>TeamId: ${player.teamId}
             <br>CohortId: ${player.cohortId}
-            <button id='details-${player.id} onclick='fetchSinglePlayer(${player.id})'>See Details</button>
-            <button id='remove-${player.id} onclick='removePlayer(${player.id})'>Remove Player</button>`
+            <button id='details-${player.id}' onclick='fetchPlayer(${player.id})'>See Details</button>
+            <button id='remove-${player.id}' onclick='removePlayer(${player.id})'>Remove Player</button>`
 
             allPlayersContainer.appendChild(playerDiv);
         })
@@ -125,6 +125,49 @@ const renderAllPlayers = (playerList) => {
     }
 };
 
+const renderPlayer = (player) => {
+    const allPlayersContainer = document.getElementById('all-players-container');
+    allPlayersContainer.innerHTML = '';
+    try {
+        const playerDiv = document.createElement('div');
+        playerDiv.classList.add(player.id);
+        playerDiv.innerHTML = `
+            Name: ${player.name}
+            <br>Breed: ${player.breed}
+            <br>Status: ${player.status}
+            <br><image src='${player.imageUrl}'>
+            <br>CreatedAt: ${player.createdAt}
+            <br>UpdatedAt: ${player.updatedAt}
+            <br>TeamId: ${player.teamId}
+            <br>CohortId: ${player.cohortId}
+            <button id='details-${player.id}' onclick='window.location.reload()'>See All Players</button>
+            <button id='remove-${player.id}' onclick='removePlayer(${player.id})'>Remove Player</button>`
+
+        allPlayersContainer.appendChild(playerDiv);
+
+        /**player.team.players.forEach(teamPlayer => {
+            if (player.id == teamPlayer.id){
+                return
+            }
+            const playerDiv = document.createElement('div');
+            playerDiv.classList.add(teamPlayer.id);
+            playerDiv.innerHTML = `
+            Name: ${teamPlayer.name}
+            <br>Breed: ${teamPlayer.breed}
+            <br>Status: ${teamPlayer.status}
+            <br><image src='${teamPlayer.imageUrl}'>
+            <br>CreatedAt: ${teamPlayer.createdAt}
+            <br>UpdatedAt: ${teamPlayer.updatedAt}
+            <br>TeamId: ${teamPlayer.teamId}
+            <br>CohortId: ${teamPlayer.cohortId}
+            <button id='details-${teamPlayer.id}' onclick='fetchPlayer(${teamPlayer.id})'>See Details</button>
+            <button id='remove-${teamPlayer.id}' onclick='removePlayer(${teamPlayer.id})'>Remove Player</button>`
+            allPlayersContainer.appendChild(playerDiv);
+        }) */
+    } catch (err) {
+        console.error('Uh oh, trouble rendering single player!', err);
+    }
+};
 
 /**
  * It renders a form to the DOM, and when the form is submitted, it adds a new player to the database,
@@ -210,4 +253,8 @@ const init = async () => {
     renderNewPlayerForm();
 }
 
+const fetchPlayer = async (playerId) => {
+    const singlePlayer = await fetchSinglePlayer(playerId);
+    renderPlayer(singlePlayer);
+}
 init();
