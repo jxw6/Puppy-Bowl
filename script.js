@@ -6,13 +6,24 @@ const cohortName = '2308-ACC-PT-WEB-PT-B';
 // Use the APIURL variable for fetch requests
 const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}/`;
 
+const state = {
+    players: [],
+};
+
+const newPlayerForm = document.getElementById('new-player-form');
+
+
+
 /**
  * It fetches all players from the API and returns them
  * @returns An array of objects.
  */
 const fetchAllPlayers = async () => {
     try {
-
+        const response = await fetch(APIURL + 'players');
+        const json = await response.json();
+        return json.data.players;
+        
     } catch (err) {
         console.error('Uh oh, trouble fetching players!', err);
     }
@@ -20,6 +31,9 @@ const fetchAllPlayers = async () => {
 
 const fetchSinglePlayer = async (playerId) => {
     try {
+        const response = await fetch(APIURL + 'players/' + playerId)
+        const json = await response.json();
+        return json.data.player;
 
     } catch (err) {
         console.error(`Oh no, trouble fetching player #${playerId}!`, err);
@@ -28,6 +42,15 @@ const fetchSinglePlayer = async (playerId) => {
 
 const addNewPlayer = async (playerObj) => {
     try {
+        const response = await fetch(APIURL + 'players', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(playerObj),
+        });
+        const result = await response.json();
+        console.log(result);
+        state.players = await fetchAllPlayers();
+        renderAllPlayers(state.players);
 
     } catch (err) {
         console.error('Oops, something went wrong with adding that player!', err);
@@ -36,7 +59,12 @@ const addNewPlayer = async (playerObj) => {
 
 const removePlayer = async (playerId) => {
     try {
-
+        const response = await fetch(APIURL + 'players/' + playerId,
+        {method: 'DELETE'});
+        const result = await response.json();
+        console.log(result);
+        state.players = await fetchAllPlayers();
+        renderAllPlayers(state.players);
     } catch (err) {
         console.error(
             `Whoops, trouble removing player #${playerId} from the roster!`,
@@ -66,8 +94,26 @@ const removePlayer = async (playerId) => {
  * @returns the playerContainerHTML variable.
  */
 const renderAllPlayers = (playerList) => {
+    const allPlayersContainer = document.getElementById('all-players-container');
+    allPlayersContainer.innerHTML = '';
     try {
-        
+        playerList.forEach(player => {
+            const playerDiv = document.createElement('div');
+            playerDiv.classList.add(player.id);
+            playerDiv.innerHTML = `
+            Name: ${player.name}
+            <br>Breed: ${player.breed}
+            <br>Status: ${player.status}
+            <br><image src='${player.imageUrl}'>
+            <br>CreatedAt: ${player.createdAt}
+            <br>UpdatedAt: ${player.updatedAt}
+            <br>TeamId: ${player.teamId}
+            <br>CohortId: ${player.cohortId}
+            <button id='details-${player.id} onclick='fetchSinglePlayer(${player.id})'>See Details</button>
+            <button id='remove-${player.id} onclick='removePlayer(${player.id})'>Remove Player</button>`
+
+            allPlayersContainer.appendChild(playerDiv);
+        })
     } catch (err) {
         console.error('Uh oh, trouble rendering players!', err);
     }
@@ -79,8 +125,58 @@ const renderAllPlayers = (playerList) => {
  * fetches all players from the database, and renders them to the DOM.
  */
 const renderNewPlayerForm = () => {
+    
     try {
-        
+        var form = document.createElement("form");
+
+        var formNameLabel = document.createElement("label")
+        var formNameInput = document.createElement("input")
+
+        formNameInput.setAttribute("id","formName");
+        formNameLabel.appendChild(formNameInput);
+        formNameLabel.innerText = "Name:";
+        form.appendChild(formNameLabel);
+
+        var formBreedLabel = document.createElement("label")
+        var formBreedInput = document.createElement("input")
+
+        formBreedInput.setAttribute("id","formBreed");
+        formBreedLabel.appendChild(formBreedInput);
+        formBreedLabel.innerText = "Breed:";
+        form.appendChild(formBreedLabel);
+
+        var formStatusLabel = document.createElement("label")
+        var formStatusInput = document.createElement("input")
+
+        formStatusInput.setAttribute("id","formStatus");
+        formStatusLabel.appendChild(formStatusInput);
+        formStatusLabel.innerText = "Status:";
+        form.appendChild(formStatusLabel);
+
+        var formImageUrlLabel = document.createElement("label")
+        var formImageUrlInput = document.createElement("input")
+
+        formImageUrlInput.setAttribute("id","formImageUrl");
+        formImageUrlLabel.appendChild(formImageUrlInput);
+        formImageUrlLabel.innerText = "ImageUrl:";
+        form.appendChild(formImageUrlLabel);
+
+        var formTeamLabel = document.createElement("label")
+        var formTeamInput = document.createElement("input")
+
+        formTeamInput.setAttribute("id","formTeam");
+        formTeamLabel.appendChild(formTeamInput);
+        formTeamLabel.innerText = "TeamID:";
+        form.appendChild(formTeamLabel);
+
+        var button = document.createElement("button");
+        button.setAttribute("type", "button");
+        button.addEventListener("click", addNewPlayer);
+        button.innerText = "Add Player";
+        form.appendChild(button);
+
+        newPlayerForm.appendChild(form);
+
     } catch (err) {
         console.error('Uh oh, trouble rendering the new player form!', err);
     }

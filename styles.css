@@ -1,5 +1,34 @@
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#all-players-container {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#all-players-container > div {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 25%;
+  padding: 12px;
+}
+
+#all-players-container > div > img {
+  width: 50%;
+}
+
+button {
+  width: fit-content;
+  padding: 0px 2px;
 }
